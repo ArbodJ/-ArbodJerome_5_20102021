@@ -7,57 +7,91 @@ function getId() {
   console.log(id);
   getProduct(id); // appel de fonction pour json
 }
-  async function getProduct(id) {
 
-    let requete = await fetch(url + '/' + id, {
+async function getProduct(id) {
+  let requete = await fetch(url + '/' + id, {
     method  : 'GET',
-    });
-
-    console.log(requete);
-    
-    if(requete.ok) {
-      let canap = await requete.json();
-      console.log(canap);
-        getDisplay(canap);
-    }
-    else {
-      alert('Err : Un Prob !!!');  
-      }   
-  }
-
-  function getDisplay(canap){ // Inserrer les elements a leurs place a sa place
-    
-    let productImg = document.createElement("img"); // la photo du canapé
-    productImg.setAttribute('src', canap.imageUrl);
-    productImg.setAttribute('alt', canap.altTxt);
+  });
+  console.log(requete);
   
-    document.getElementsByClassName('item__img')[0].append(productImg); // placement de l'image
+  if(!requete.ok) {
+    alert('Err : Un Prob !!!');
+  }
+  else {
+    let canap = await requete.json();
+    console.log(canap);
+    getDisplay(canap);
+  }   
+}
 
-    document.getElementById('title').append(canap.name); // Afficher le nom du canapé
 
-    document.getElementById('price').append(canap.price); // Afficher le prix du canapé
+function getDisplay(canap){ // Inserrer les elements a leurs place a sa place
+  
+  let productImg = document.createElement("img"); // la photo du canapé
+  productImg.setAttribute('src', canap.imageUrl);
+  productImg.setAttribute('alt', canap.altTxt);
 
-    document.getElementById('description').append(canap.description); // Afficher la description du canapé
+  document.getElementsByClassName('item__img')[0].append(productImg); // placement de l'image
 
-    // selection de la couleur
-    let selectColor = document.getElementById("colors"); 
-      for (let i = 0; i < canap.colors.length; i++) {
-        let option = document.createElement("option");
-        option.textContent = canap.colors[i];
-        selectColor.append(option);
-      }
-      
-      let btn = document.getElementById('addToCart');
-      //btn.setAttribute('href', './cart.html?');
-      
-      btn.addEventListener('click', () => {
-        btn = window.location.assign("./cart.html?id=" + canap._id);
-        console.log(btn);
-      })  
-      
-        
-      
-   }
+  document.getElementById('title').append(canap.name); // Afficher le nom du canapé
+
+  document.getElementById('price').append(canap.price); // Afficher le prix du canapé
+
+  document.getElementById('description').append(canap.description); // Afficher la description du canapé
+  // selection de la couleur
+  let selectColor = document.getElementById("colors"); 
+  for (let i = 0; i < canap.colors.length; i++) {
+    let option = document.createElement("option");
+    option.textContent = canap.colors[i];
+    option.setAttribute('value', canap.colors[i]);
+    selectColor.append(option);
+  }
+  btn(canap);
+}      
    
 getId();
+
+/**
+ * Creation d'un objet 
+ * au click addToCart, ainsi que la lecture,
+ * la recuperation et stockage du produit
+ *  selectionné + couleur et quantité testés
+ */
+
+function btn(canap) { 
+  
+  let btn = document.getElementById('addToCart');
+  btn.addEventListener('click', (event) => {
+    event.preventDefault();
+    let selectQuantity = document.getElementById('quantity').value; // test choix quantité
+    if(selectQuantity == 0 || selectQuantity >100){
+    alert('Err :: La quantité est vide ou superieur a 100');
+    }
+    let colorTest = document.getElementById('colors'); // test choix couleur
+    if(colors.value == []){
+      alert('Err :: Une couleur n\'as été selectionnée');
+    }
+    else{
+      console.log(colorTest);
+    }
+    let selection = { // Creation objet : selection du produit
+      idProduct : canap._id,
+      imageProduct : canap.imageUrl,
+      nameProduct : canap.name,
+      descriptionProduct : canap.description,
+      colorProduct : colors.value ,
+      numberProduct : quantity.value
+    };
+    console.log(selection);
+  })
+
+  let selectionProd = JSON.parse(localStorage.getItem(btn));
+  console.log(selectionProd);
+
+  // creation de localStorage.setItme
+
+  // btn.addEventListener('click', () => {
+  //   btn = window.location.assign("./cart.html?id=" + canap._id);
+  //   console.log(btn);
+}
 
