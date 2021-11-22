@@ -1,4 +1,11 @@
 const url = 'http://localhost:3000/api/products';
+// ? searchparam
 
-let recup = JSON.parse(localStorage.getItem(''));
-console.log(recup);
+// requete json
+
+/**
+ * creation dom
+ * affichage dom
+ * calculer le prix
+ * btn supprimer
+ */
