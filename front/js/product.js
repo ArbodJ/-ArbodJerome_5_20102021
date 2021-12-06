@@ -24,7 +24,13 @@ async function getProduct(id) {
     let canap =  await requete.json();
     console.log(canap);
     getDisplay(canap);
-  }   
+  }
+  // let requete = await fetch(url + '/' + id, {
+  //   method : 'GET'
+    
+  // });
+  // console.log(requete);
+   
 }
 // Affichage du produit selectionné de la page index
 function getDisplay(canap){ // Inserrer les elements a leurs places
@@ -50,6 +56,9 @@ function getDisplay(canap){ // Inserrer les elements a leurs places
   // Appel du button 'ajouter au panier' et controle du click
   let btn = document.getElementById('addToCart');
   btn.idProduct = canap._id;
+  btn.nameProduct = canap.name;
+  btn.priceProduct = canap.price;
+  btn.imageProduct = canap.imageUrl;
   btn.addEventListener('click', (event) => {
     btn.setAttribute('disabled', 'disabled');
     addToCart(event);
@@ -60,28 +69,33 @@ function addToCart(event) {
   let btn = event.target;
   let selectedColor = document.getElementById('colors').value;
   let selectedQty = parseInt(document.getElementById('quantity').value);
+  
+  
+  let selection = { // Creation objet : selection du produit
+    idProduct : btn.idProduct,
+    colorProduct : selectedColor ,
+    numberProduct : selectedQty,
+    nameProduct : btn.nameProduct,
+    priceProduct : btn.priceProduct,
+    imageProduct : btn.imageProduct
 
-  if('' === selectedColor){ // Test de choix de couleur
+  }
+
+  if(selectedColor == ''){ // Test de choix de couleur
     alert('Err :: Couleur non selectionné');
-    return false;
+    return;
   }
 
   if(selectedQty <= 0 || selectedQty > 100){
     alert('Err :: La quantité n\'as pas été selectionné, ou superieur a 100');
-    return false;
-  }
-
-  let selection = { // Creation objet : selection du produit
-    idProduct : btn.idProduct,
-    colorProduct : selectedColor ,
-    numberProduct : selectedQty
+    return;
   }
 
   let cart = getCart();
     if (cart.length){
       let updated = false;
       for (let i in cart) {
-        if (cart[i].idProduct === selection.idProduct && cart[i].colorProduct === selection.colorProduct){
+        if (cart[i].idProduct == selection.idProduct && cart[i].colorProduct == selection.colorProduct){
             cart[i].numberProduct += selection.numberProduct;
             updated = true;
         }
@@ -103,7 +117,7 @@ function getCart() {
   if(!localStorage.getItem("selectionProd")){
      return resultAdd;
   }
-  return JSON.parse(localStorage.getItem('selectionProd'));
+  return JSON.parse(localStorage.getItem("selectionProd"));
 }
 
 document.addEventListener('DOMContentLoaded', () => {
