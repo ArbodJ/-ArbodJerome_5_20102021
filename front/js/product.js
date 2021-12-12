@@ -59,6 +59,7 @@ function getDisplay(canap){ // Inserrer les elements a leurs places
   btn.nameProduct = canap.name;
   btn.priceProduct = canap.price;
   btn.imageProduct = canap.imageUrl;
+  btn.altProduct = canap.altTxt;
   btn.addEventListener('click', (event) => {
     btn.setAttribute('disabled', 'disabled');
     addToCart(event);
@@ -77,25 +78,27 @@ function addToCart(event) {
     numberProduct : selectedQty,
     nameProduct : btn.nameProduct,
     priceProduct : btn.priceProduct,
-    imageProduct : btn.imageProduct
-
+    imageProduct : btn.imageProduct,
+    altProduct : btn.altTxt
   }
 
-  if(selectedColor == ''){ // Test de choix de couleur
+  btn.removeAttribute('disabled');
+
+  if('' === selectedColor){ // Test de choix de couleur
     alert('Err :: Couleur non selectionné');
-    return;
+    return false;
   }
 
   if(selectedQty <= 0 || selectedQty > 100){
-    alert('Err :: La quantité n\'as pas été selectionné, ou superieur a 100');
-    return;
+    alert('Err :: le nombre d\'article doit être compris entre 1 et 100');
+    return false;
   }
 
   let cart = getCart();
     if (cart.length){
       let updated = false;
       for (let i in cart) {
-        if (cart[i].idProduct == selection.idProduct && cart[i].colorProduct == selection.colorProduct){
+        if (cart[i].idProduct === selection.idProduct && cart[i].colorProduct === selection.colorProduct){
             cart[i].numberProduct += selection.numberProduct;
             updated = true;
         }
@@ -107,7 +110,6 @@ function addToCart(event) {
       cart.push(selection);
     }
   localStorage.setItem("selectionProd", JSON.stringify(cart));
-  btn.removeAttribute('disabled');
   console.log(selection);  
 }
 
