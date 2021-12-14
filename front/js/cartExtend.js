@@ -3,11 +3,11 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initCart(){
-  if (condition) {
+  // if (condition) {
     
-  } else {
-    displayProd();
-  }
+  // } else {
+     displayProd();
+  // }
   
 }
 
@@ -50,9 +50,9 @@ function createBasket(item){
   cartItemImg.setAttribute('class', 'cart__item__img');
   let cartImage = document.createElement('img');
   cartImage.setAttribute('src', item.imageProduct);
-  cartImage.textContent = item.imageProduct;
+  //cartImage.textContent = item.imageProduct;
   cartImage.setAttribute('alt', item.altTxt);
-  cartImage.textContent = item.altTxt;
+  //cartImage.textContent = item.altTxt;
   cartItemImg.append(cartImage);
   article.append(cartItemImg);
 
