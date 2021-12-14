@@ -1,7 +1,7 @@
-const url = 'http://localhost:3000/api/products';
-console.log(url);
+// const url = 'http://localhost:3000/api/products';
+// console.log(url);
 // Recuperation de la selection de product.js
-//verification panier
+// verification panier
 let catchProduct = JSON.parse(localStorage.getItem("selectionProd"));
 console.log(catchProduct);
 
@@ -11,7 +11,7 @@ catchProduct.forEach(item => {
   let section = document.getElementById('cart__items');
   
   // creation de la balise article
-  let article =document.createElement('article');
+  let article = document.createElement('article');
   article.setAttribute('class', 'cart__item');
   article.setAttribute('data-id', item.idProduct);
   article.setAttribute('data-color', item.colorProduct);
@@ -77,8 +77,8 @@ catchProduct.forEach(item => {
   cartItemSettingDelete.append(deleted);
   // placement de article dans la section
   section.append(article);
-  displayTotal();
-  
+  //displayTotal();
+  //localStorage.setItem('selectionProd', JSON.stringify(catchProduct));
 });
 // ---------- PARTIE PANIER ---------- //
 
@@ -95,9 +95,10 @@ function displayTotal(){
     prcArticle +=  ttl.numberProduct * ttl.priceProduct;
     totalQty.textContent = qtyArticle; 
     totalPrice.textContent = prcArticle;
+    //localStorage.setItem('selectionProd', JSON.stringify(qtyArticle, prcArticle));
   });
   //modifTtl();
-  
+  console.log(total);
 }
 displayTotal();
 
@@ -122,13 +123,13 @@ document.querySelectorAll('.deleteItem').forEach(item => {
 
       /* SUPPRIMER DU HTML */
       article.remove();
-      displayTotal();
+     //displayTotal();
   })
 })
 
 document.querySelectorAll('.itemQuantity').forEach(item => {
-  item.addEventListener('change', () => {
-      
+  item.addEventListener('change', (e) => {
+      e.preventDefault();
       let article = item.closest('article');
       let id = article.getAttribute("data-id");
       let color = article.getAttribute("data-color");
@@ -141,10 +142,11 @@ document.querySelectorAll('.itemQuantity').forEach(item => {
               element.numberProduct = parseInt(item.value);
           }
           newPanier.push(element);
+          console.log(newPanier);
       })
-
+console.log(panier);
       localStorage.setItem('selectionProd', JSON.stringify(newPanier));
-      totalsArticle();
+      //displayTotal();
   })
 })
 
@@ -178,7 +180,7 @@ lastName.addEventListener('input', (e) => {
 // Adresse
 let address = document.getElementById('address');
 let badAddress = document.getElementById('addressErrorMsg');
-let regexAdrs = /^(?=.{3,50}$)[a-z]+(?:['_.\s][a-z]+)*$/i;
+let regexAdrs = /^[a-zA-Z0-9\s,'-]*$/;
 
 address.addEventListener('input', (e) =>{
   e.preventDefault();
@@ -189,8 +191,8 @@ address.addEventListener('input', (e) =>{
   }
 })
 // Ville
-let town = document.getElementById('address');
-let badTown = document.getElementById('addressErrorMsg');
+let town = document.getElementById('city');
+let badTown = document.getElementById('cityErrorMsg');
 let regexTwn =  /^[a-zA-Z',.\s-]{1,35}$/;
 
 town.addEventListener('input', (e) => {
@@ -203,14 +205,14 @@ town.addEventListener('input', (e) => {
 // E-mail
 let email = document.getElementById('email');
 let badEmail = document.getElementById('emailErrorMsg');
-let regexEmail = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+let regexEmail = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
 
 email.addEventListener('input', (e) => {
-  if(!regexEmail.test(email.value =='') || !regexEmail.test(email.value)){
+  if(!regexEmail.test(email.value)){
     badEmail.textContent = "ERREUR : Email non renseigné ou email invalid";
   } else {
     badEmail.textContent = "Email valide";
   }
 })
-
+console.log(firstName, lastName, address, town, email);
 
