@@ -2,13 +2,8 @@ document.addEventListener('DOMContentLoaded', () => {
   initCart();
 });
 
-function initCart(){
-  // if (condition) {
-    
-  // } else {
-     displayProd();
-  // }
-  
+function initCart(){ 
+  displayProd();
 }
 
 function displayProd(){
@@ -23,7 +18,7 @@ function displayProd(){
 
 function complementProd(panier){
   panier.forEach(item => {
-    fetch('http://localhost:3000/api/products/' + item.idProduct)
+    fetch('http://localhost:3000/api/products/' + '/' + item.idProduct)
       .then((res) => res.json())
       .then((kanap) => {
         kanap.qty = item.numberProduct;
@@ -33,25 +28,26 @@ function complementProd(panier){
     });
   });
 }
+//complementProd();
 
-function createBasket(item){
+function createBasket(kanap){
   // emplacement de l'affichage du et/ou des produits
   let section = document.getElementById('cart__items');
   
   // creation de la balise article
   let article = document.createElement('article');
   article.setAttribute('class', 'cart__item');
-  article.setAttribute('data-id', item.idProduct);
-  article.setAttribute('data-color', item.colorProduct);
+  article.setAttribute('data-id', kanap.idProduct);
+  article.setAttribute('data-color', kanap.colorProduct);
   
   
   // creation, placement et affichage div et "IMG"
   let cartItemImg = document.createElement('div');
   cartItemImg.setAttribute('class', 'cart__item__img');
   let cartImage = document.createElement('img');
-  cartImage.setAttribute('src', item.imageProduct);
+  cartImage.setAttribute('src', kanap.imageProduct);
   //cartImage.textContent = item.imageProduct;
-  cartImage.setAttribute('alt', item.altTxt);
+  cartImage.setAttribute('alt', kanap.altTxt);
   //cartImage.textContent = item.altTxt;
   cartItemImg.append(cartImage);
   article.append(cartItemImg);
@@ -66,11 +62,11 @@ function createBasket(item){
   cartItemContentDescription.setAttribute('class', 'cart__item__content__description');
   cartItemContent.append(cartItemContentDescription);
   let title = document.createElement('h2');
-  title.textContent = item.nameProduct;
+  title.textContent = kanap.nameProduct;
   let clr = document.createElement('p');
-  clr.textContent = item.colorProduct;
+  clr.textContent = kanap.colorProduct;
   let price = document.createElement('p');
-  price.textContent = item.priceProduct + ' €';
+  price.textContent = kanap.priceProduct + ' €';
   cartItemContentDescription.append(title, clr, price);
 
   // creation et placement div setting
@@ -87,7 +83,7 @@ function createBasket(item){
   let nbrQty = document.createElement('input');
   nbrQty.setAttribute('type', 'number', 'class', 'itemQuantity', 'name', 'itemQuantity');
   nbrQty.setAttribute('min', '1', 'max','100');
-  nbrQty.setAttribute('value', item.numberProduct);
+  nbrQty.setAttribute('value', kanap.numberProduct);
   nbrQty.addEventListener('change', function(event){
     updateQty(event);
     event.target.value;
@@ -109,11 +105,53 @@ function createBasket(item){
   // placement de article dans la section
   section.append(article);
 }
+createBasket();
+
+function calcul(kanap){
+  let total = JSON.parse(localStorage.getItem('selectionProd'));
+  let totalQty = document.querySelector('#totalQuantity');
+  let totalPrice = document.querySelector('#totalPrice');
+  let qtyArticle = 0;
+  let prcArticle = 0;
+
+  total.forEach(item => {
+    qtyArticle += item.numberProduct;
+    prcArticle +=  item.numberProduct * item.priceProduct;
+    totalQty.textContent = qtyArticle; 
+    totalPrice.textContent = prcArticle;
+    localStorage.setItem('selectionProd', JSON.stringify(qtyArticle, prcArticle));
+  });
+  console.log(total);
+  console.log(calcul(kanap));
+}
 
 function updateQty(event){
   console.log(event.target.value);
 }
 
-function deletedProduct(event){
-  console.log(event.target)
-}
+// function deletedProduct(event){
+//   console.log(event.target)
+//   document.querySelectorAll('.deleteItem').forEach(kanap => {
+//     kanap.addEventListener('click', () => {
+        
+//         let article = kanap.closest('article');
+//         let id = article.getAttribute("data-id", kanap.idProduct);
+//         let color = article.getAttribute("data-color", kanap.colorProduct);
+//         let panier = JSON.parse(localStorage.getItem('selectionProd'));
+//         let newPanier = [];
+  
+//         /* SUPPRIMER DU LOCALSTORAGE */
+//         panier.forEach(element => {
+//             if(element.idProduct != id || element.colorProduct != color){
+//                 newPanier.push(element);
+//             }
+//         })
+  
+//         localStorage.setItem('selectionProd', JSON.stringify(newPanier));
+  
+//         /* SUPPRIMER DU HTML */
+//         article.remove();
+//        //displayTotal();
+//     });
+//   });
+// }
