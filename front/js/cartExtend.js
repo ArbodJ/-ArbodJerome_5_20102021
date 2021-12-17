@@ -126,16 +126,16 @@ function calcul(kanap){
 }
 
 function updateQty(event){
-  Event.target;
+  
   document.querySelectorAll('.itemQuantity').forEach(item => {
-    let addarticle = document.querySelector('#totalQuantity', item.value);
-    let addPrice = document.querySelector('#totalPrice', item.value);
+    let addarticle = document.querySelector('#totalQuantity', item.numberProduct);
+    let addPrice = document.querySelector('#totalPrice', item.price);
     let panier = JSON.parse(localStorage.getItem("selectionProd"));
     let newBasket = [];
 
     panier.forEach(event => {
-      addarticle += event.addarticle;
-      addPrice += event.addPrice;
+      addarticle == event.numberProduct + event.numberProduct;
+      addPrice == event.price.value + event.price.value;
     })
     console.log(newBasket);
     newBasket.push(event);
