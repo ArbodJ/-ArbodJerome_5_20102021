@@ -130,14 +130,15 @@ function updateQty(event){
   document.querySelectorAll('.itemQuantity').forEach(item => {
     let addarticle = document.querySelector('#totalQuantity', item.value);
     let addPrice = document.querySelector('#totalPrice', item.value);
+    let panier = JSON.parse(localStorage.getItem("selectionProd"));
     let newBasket = [];
 
-    newBasket.forEach(event => {
+    panier.forEach(event => {
       addarticle += event.addarticle;
       addPrice += event.addPrice;
     })
     console.log(newBasket);
-    //newBasket.push(event);
+    newBasket.push(event);
     calcul();
     // let article = item.closest('article');
     // let id = article.getAttribute("data-id");
@@ -159,7 +160,7 @@ function updateQty(event){
     // //displayTotal();
   })
 }
-
+console.log(updateQty());
 updateQty();
 
 
