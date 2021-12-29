@@ -75,11 +75,11 @@ function addToCart(event) {
   let selection = { // Creation objet : selection du produit
     idProduct : btn.idProduct,
     colorProduct : selectedColor ,
-    numberProduct : selectedQty,
-    nameProduct : btn.nameProduct,
-    priceProduct : btn.priceProduct,
-    imageProduct : btn.imageProduct,
-    altProduct : btn.altTxt
+    numberProduct : selectedQty
+    // nameProduct : btn.nameProduct,
+    // priceProduct : btn.priceProduct,
+    // imageProduct : btn.imageProduct,
+    // altProduct : btn.altTxt
   }
 
   btn.removeAttribute('disabled');

@@ -28,7 +28,6 @@ function complementProd(panier){
     });
   });
 }
-//complementProd();
 
 function createBasket(kanap){
   // emplacement de l'affichage du et/ou des produits
@@ -81,12 +80,18 @@ function createBasket(kanap){
   let quantity = document.createElement('p');
   quantity.textContent = 'Qté :';
   let nbrQty = document.createElement('input');
-  nbrQty.setAttribute('type', 'number', 'class', 'itemQuantity', 'name', 'itemQuantity');
-  nbrQty.setAttribute('min', '1', 'max','100');
+  nbrQty.setAttribute('type', 'number');
+  nbrQty.setAttribute('class', 'itemQuantity');
+  nbrQty.setAttribute('name', 'itemQuantity');
+  nbrQty.setAttribute('min', '1');
+  nbrQty.setAttribute('max','100');
   nbrQty.setAttribute('value', kanap.qty);
+  nbrQty.idProduct = kanap._id;
+  nbrQty.colorProduct = kanap.colorSelected;
+  nbrQty.price = kanap.price;
   nbrQty.addEventListener('change', function(event){
     updateQty(event);
-    event.target.value;
+    //event.target.value;
   });
   cartItemSettingQty.append(quantity,nbrQty);
 
@@ -98,14 +103,13 @@ function createBasket(kanap){
   deleted.setAttribute('href', '');
   deleted.textContent = 'Supprimer';
   deleted.addEventListener('click', function(event){
-    deletedProduct(event);
-    event.target;
+    deletedStorage(event);
+    //event.target;
   });
   cartItemSettingDelete.append(deleted);
   // placement de article dans la section
   section.append(article);
 }
-//createBasket();
 
 function calcul(kanap){
   let total = JSON.parse(localStorage.getItem('selectionProd'));
@@ -115,79 +119,61 @@ function calcul(kanap){
   let prcArticle = 0;
 
   total.forEach(item => {
-    qtyArticle += item.numberProduct;
-    prcArticle +=  item.numberProduct * kanap.price;
+    qtyArticle += parseInt(item.numberProduct);
+    prcArticle +=  parseInt(item.numberProduct) * parseInt(kanap.price);
     totalQty.textContent = qtyArticle; 
     totalPrice.textContent = prcArticle;
-    //localStorage.setItem('selectionProd', JSON.stringify(qtyArticle, prcArticle));
   });
-  //console.log(total);
-  
 }
 
 function updateQty(event){
-  
-  document.querySelectorAll('.itemQuantity').forEach(item => {
-    let addarticle = document.querySelector('#totalQuantity', item.numberProduct);
-    let addPrice = document.querySelector('#totalPrice', item.price);
-    let panier = JSON.parse(localStorage.getItem("selectionProd"));
-    let newBasket = [];
+  let recupStorage = JSON.parse(localStorage.getItem('selectionProd'));
+  // let array = ['un', 'deux', 'trois']; array[0];
+  // recupStorage = [{idProduct: xxx, colorProduct: xxxx, NumberProduct: xxx},{idProduct: xxx, colorProduct: xxxx, NumberProduct: xxx}]
+  // let object = {
+  // voiture: renault,
+  // couleur: rouge
+  //}object.voiture; object['voiture'];
+  recupStorage.forEach(item => {
+    
+    if(item.idProduct == event.target.idProduct && item.colorProduct == event.target.colorProduct){
 
-    panier.forEach(event => {
-      addarticle == event.numberProduct + event.numberProduct;
-      addPrice == event.price.value + event.price.value;
-    })
-    console.log(newBasket);
-    newBasket.push(event);
-    calcul();
-    // let article = item.closest('article');
-    // let id = article.getAttribute("data-id");
-    // let color = article.getAttribute("data-color");
-    // let panier = JSON.parse(localStorage.getItem("selectionProd"));
-    // let newPanier = [];
+      item.numberProduct = parseInt(event.target.value);//<= rajout de parseInt()
 
-    // /* MODFIER DU LOCALSTORAGE */
-    // panier.forEach(element => {
-    //     if(element.idProduct != id || element.colorProduct != color){
-    //         element.qty = parseInt(item.value);
-    //     }
-    //     newPanier.push(element);
-    //     console.log(newPanier);
-    //     calcul();
-    // })
-    // console.log(panier);
-    // //localStorage.setItem('selectionProd', JSON.stringify(newPanier));
-    // //displayTotal();
+      
+    }
   })
+  
+  localStorage.setItem('selectionProd', JSON.stringify(recupStorage));// <= rajout de stringify corrige l'erreur 
+  console.log(event.target.value);
+  calculTtl();
 }
-console.log(updateQty());
-updateQty();
 
-
-function deletedProduct(event){
-  
-  
-  document.querySelectorAll('.deleteItem').forEach(kanap => {
-    kanap.addEventListener('click', () => {
-        
-        let article = kanap.closest('article');
-        let id = article.getAttribute("data-id", kanap._id);
-        let color = article.getAttribute("data-color", kanap.colorSelected);
-        let panier = JSON.parse(localStorage.getItem('selectionProd'));
-        let newPanier = [];
-  
-        /* SUPPRIMER DU LOCALSTORAGE */
-        panier.forEach(element => {
-            if(element._id != id || element.colorSelected != color){
-                newPanier.push(element);
-            }
-        })
-  
-        localStorage.setItem('selectionProd', JSON.stringify(newPanier));
-  
-        /* SUPPRIMER DU HTML */
-        article.remove();
-       //displayTotal();
-    });
+function calculTtl(){
+  let qtyTtl = 0;
+  let total = 0;
+  let inputs = document.getElementsByClassName('itemQuantity');
+  // tableau qui contient objet
+  // let inputs = [{value: xxx , price: xxx}, {value: xxx , price: xxx}, {value: xxx , price: xxx} ]
+  inputs.forEach(input => {
+    qtyTtl += parseInt(input.value);
+    total += parseInt(input.value) * (input.price);
   });
+  document.getElementById('totalQuantity').textContent = qtyTtl;//<= probleme a l'affichage il affiche le foreach ? ligne 157, 151
+  document.getElementById('totalPrice').textContent = total;
+  console.log(qtyTtl);
+  console.log(total);
+  
+  
+}
+calculTtl();
+
+function deletedStorage(event){
+ 
+  let deleted = JSON.parse(localStorage.getItem('selectionProd'));
+
+  deleted.forEach(button => {
+
+  })
+  
 }
