@@ -157,12 +157,13 @@ function calculTtl(){
   // let inputs = [{value: xxx , price: xxx}, {value: xxx , price: xxx}, {value: xxx , price: xxx} ]
   inputs.forEach(input => {
     qtyTtl += parseInt(input.value);
-    total += parseInt(input.value) * (input.price);
+    total += parseInt(input.value) * parseInt(input.price);
   });
   document.getElementById('totalQuantity').textContent = qtyTtl;
   document.getElementById('totalPrice').textContent = total;
   console.log(qtyTtl);
   console.log(total);
+  console.log(inputs);
   
   
 }
