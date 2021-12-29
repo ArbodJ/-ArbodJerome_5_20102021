@@ -166,7 +166,7 @@ function calculTtl(){
   
   
 }
-calculTtl();
+
 
 function deletedStorage(event){
   document.getElementsByTagName('deleteItem');
