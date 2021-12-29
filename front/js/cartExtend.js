@@ -144,7 +144,7 @@ function updateQty(event){
     }
   })
   
-  localStorage.setItem('selectionProd', JSON.stringify(recupStorage));// <= rajout de stringify corrige l'erreur 
+  localStorage.setItem('selectionProd', JSON.stringify(recupStorage));// <= rajout de stringify  
   console.log(event.target.value);
   calculTtl();
 }
@@ -159,7 +159,7 @@ function calculTtl(){
     qtyTtl += parseInt(input.value);
     total += parseInt(input.value) * (input.price);
   });
-  document.getElementById('totalQuantity').textContent = qtyTtl;//<= probleme a l'affichage il affiche le foreach ? ligne 157, 151
+  document.getElementById('totalQuantity').textContent = qtyTtl;
   document.getElementById('totalPrice').textContent = total;
   console.log(qtyTtl);
   console.log(total);
@@ -169,11 +169,12 @@ function calculTtl(){
 calculTtl();
 
 function deletedStorage(event){
+  document.getElementsByTagName('deleteItem');
  
   let deleted = JSON.parse(localStorage.getItem('selectionProd'));
 
   deleted.forEach(button => {
 
-  })
+  });
   
 }
