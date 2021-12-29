@@ -146,7 +146,7 @@ function updateQty(event){
   
   localStorage.setItem('selectionProd', JSON.stringify(recupStorage));// <= rajout de stringify  
   console.log(event.target.value);
-  calculTtl();
+  
 }
 
 function calculTtl(){
