@@ -124,7 +124,11 @@ function calcul(kanap){
     totalQty.textContent = qtyArticle; 
     totalPrice.textContent = prcArticle;
   });
+  console.log(qtyArticle);
+  console.log(prcArticle);
+  console.log(total);
 }
+//calcul();
 
 function updateQty(event){
   let recupStorage = JSON.parse(localStorage.getItem('selectionProd'));
@@ -146,7 +150,7 @@ function updateQty(event){
   
   localStorage.setItem('selectionProd', JSON.stringify(recupStorage));// <= rajout de stringify  
   console.log(event.target.value);
-  
+  calculTtl();
 }
 
 function calculTtl(){
@@ -155,27 +159,45 @@ function calculTtl(){
   let inputs = document.getElementsByClassName('itemQuantity');
   // tableau qui contient objet
   // let inputs = [{value: xxx , price: xxx}, {value: xxx , price: xxx}, {value: xxx , price: xxx} ]
-  inputs.forEach(input => {
+  for(let input of inputs) {
     qtyTtl += parseInt(input.value);
     total += parseInt(input.value) * parseInt(input.price);
-  });
+  }
+  //});
   document.getElementById('totalQuantity').textContent = qtyTtl;
   document.getElementById('totalPrice').textContent = total;
   console.log(qtyTtl);
   console.log(total);
   console.log(inputs);
-  
-  
 }
 
 
 function deletedStorage(event){
   document.getElementsByTagName('deleteItem');
- 
-  let deleted = JSON.parse(localStorage.getItem('selectionProd'));
-
-  deleted.forEach(button => {
-
-  });
   
+  // let deleted = document.getElementsByClassName('deleteItem');
+  
+  let delStorage = JSON.parse(localStorage.getItem('selectionProd'));
+  let newPanier = [];
+  
+  for(let item of delStorage) {
+    if(item.idProduct != event.target.idProduct && item.colorProduct != event.target.colorProduct) {
+      newPanier.push(event);
+      console.log(event);
+    }
+  }
+  localStorage.setItem('selectionProd', JSON.stringify(newPanier));
+  
+  location.reload();
+  
+  console.log(delStorage);
+    
+    
+  // for(let button of deleted){
+  //   if (button.idProduct != event.target.idProduct || button.colorProduct != event.target.colorProduct) {
+  //      article.remove();
+  //   }
+  // };
+  // localStorage.setItem('selectionProd', JSON.stringify(deleted));
+  // calcul();
 }
