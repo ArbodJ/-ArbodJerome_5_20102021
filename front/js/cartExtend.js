@@ -24,7 +24,7 @@ function complementProd(panier){
         kanap.qty = item.numberProduct;
         kanap.colorSelected = item.colorProduct;
         createBasket(kanap);
-        calcul(kanap);
+        // calcul(kanap);
     });
   });
 }
@@ -37,7 +37,7 @@ function createBasket(kanap){
   let article = document.createElement('article');
   article.setAttribute('class', 'cart__item');
   article.setAttribute('data-id', kanap._id);
-  article.setAttribute('data-color', kanap.colorProduct);
+  article.setAttribute('data-color', kanap.colorSelected);
   
   
   // creation, placement et affichage div et "IMG"
@@ -109,47 +109,6 @@ function createBasket(kanap){
   cartItemSettingDelete.append(deleted);
   // placement de article dans la section
   section.append(article);
-}
-
-function calcul(kanap){
-  let total = JSON.parse(localStorage.getItem('selectionProd'));
-  let totalQty = document.querySelector('#totalQuantity');
-  let totalPrice = document.querySelector('#totalPrice');
-  let qtyArticle = 0;
-  let prcArticle = 0;
-
-  total.forEach(item => {
-    qtyArticle += parseInt(item.numberProduct);
-    prcArticle +=  parseInt(item.numberProduct) * parseInt(kanap.price);
-    totalQty.textContent = qtyArticle; 
-    totalPrice.textContent = prcArticle;
-  });
-  console.log(qtyArticle);
-  console.log(prcArticle);
-  console.log(total);
-}
-//calcul();
-
-function updateQty(event){
-  let recupStorage = JSON.parse(localStorage.getItem('selectionProd'));
-  // let array = ['un', 'deux', 'trois']; array[0];
-  // recupStorage = [{idProduct: xxx, colorProduct: xxxx, NumberProduct: xxx},{idProduct: xxx, colorProduct: xxxx, NumberProduct: xxx}]
-  // let object = {
-  // voiture: renault,
-  // couleur: rouge
-  //}object.voiture; object['voiture'];
-  recupStorage.forEach(item => {
-    
-    if(item.idProduct == event.target.idProduct && item.colorProduct == event.target.colorProduct){
-
-      item.numberProduct = parseInt(event.target.value);//<= rajout de parseInt()
-
-      
-    }
-  })
-  
-  localStorage.setItem('selectionProd', JSON.stringify(recupStorage));// <= rajout de stringify  
-  console.log(event.target.value);
   calculTtl();
 }
 
@@ -171,24 +130,50 @@ function calculTtl(){
   console.log(inputs);
 }
 
+function updateQty(event){
+  let recupStorage = JSON.parse(localStorage.getItem('selectionProd'));
+  // let array = ['un', 'deux', 'trois']; array[0];
+  // recupStorage = [{idProduct: xxx, colorProduct: xxxx, NumberProduct: xxx},{idProduct: xxx, colorProduct: xxxx, NumberProduct: xxx}]
+  // let object = {
+  // voiture: renault,
+  // couleur: rouge
+  //}object.voiture; object['voiture'];
+  recupStorage.forEach(item => {
+    if(item.idProduct == event.target.idProduct && item.colorProduct == event.target.colorProduct){
+      item.numberProduct = parseInt(event.target.value);//<= rajout de parseInt()
+    }
+  })
+  
+  localStorage.setItem('selectionProd', JSON.stringify(recupStorage));// <= rajout de stringify  
+  console.log(event.target.value);
+  calculTtl();
+}
 
 function deletedStorage(event){
-  document.getElementsByTagName('deleteItem');
   
+  
+  let articleDel = event.target.closest('article');
+  let idDel = articleDel.getAttribute('data-id');
+  let colorDel = articleDel.getAttribute('data-color');
   // let deleted = document.getElementsByClassName('deleteItem');
+  console.log(articleDel);
+  console.log(idDel);
+  console.log(colorDel);
   
   let delStorage = JSON.parse(localStorage.getItem('selectionProd'));
   let newPanier = [];
   
   for(let item of delStorage) {
-    if(item.idProduct != event.target.idProduct && item.colorProduct != event.target.colorProduct) {
-      newPanier.push(event);
-      console.log(event);
+    if(item.idProduct != idDel && item.colorProduct != colorDel) {
+      newPanier.push(item);
+      console.log(item);
     }
   }
   localStorage.setItem('selectionProd', JSON.stringify(newPanier));
+  articleDel.remove();
+  calculTtl();
   
-  location.reload();
+  
   
   console.log(delStorage);
     
@@ -199,5 +184,5 @@ function deletedStorage(event){
   //   }
   // };
   // localStorage.setItem('selectionProd', JSON.stringify(deleted));
-  // calcul();
+  
 }
