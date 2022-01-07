@@ -108,7 +108,15 @@ function createBasket(kanap){
   cartItemSettingDelete.append(deleted);
   // placement de article dans la section
   section.append(article);
+
+  // Appel de la fonction calcul
   calculTtl();
+
+  //Appel de la fonction formulaire
+  let addForm = document.querySelector("form");
+  addForm.addEventListener('submit', function(evt){
+    form(evt);
+  });
 }
 // ----- CALCUL DU PANIER ----- //
 function calculTtl(){
@@ -175,86 +183,121 @@ function deletedStorage(event){
 }
 
 // ---------- PARTIE FORMULAIRE : INFO CLIENT---------- //
-function form() {
-  // Prenom
-  let firstName = document.getElementById('firstName');
-  let badFirstName = document.getElementById('firstNameErrorMsg');
-  let regex = /^(?=.{3,50}$)[a-z]+(?:['_.\s][a-z]+)*$/i;
 
-  firstName.addEventListener('input', (e) => {
-    e.preventDefault();
-    if(!regex.test(firstName.value)){
-      badFirstName.textContent = "ERREUR : Prénom non renseigné ou prenom invalide";
-    } else {
-      badFirstName.textContent = 'Prénom valide';
-    }
-  })
-  // Nom
-  let lastName = document.getElementById('lastName');
-  let badLastName = document.getElementById('lastNameErrorMsg');
-  //let regexLstNm = /^(?=.{3,50}$)[a-z]+(?:['_.\s][a-z]+)*$/i;
+function form(evt) {
+  
+  try {
+    let descriptionOk = (firstName = document.getElementById('firstName'), lastName = document.getElementById('lastName'), town = document.getElementById('city'));
+    let descriptionBad = (badFirstName = document.getElementById('firstNameErrorMsg'), badLastName = document.getElementById('lastNameErrorMsg'), badTown = document.getElementById('cityErrorMsg'));
+    let regex = /^(?=.{3,50}$)[a-z]+(?:['_.\s][a-z]+)*$/i;
 
-  lastName.addEventListener('input', (e) => {
-    e.preventDefault();
-    if(!regex.test(lastName.value)){
-      badLastName.textContent= "ERREUR : Nom non renseigné ou nom invalide";
-    } else {
-      badLastName.textContent= "Nom valide";
-    }
-  })
-  // Adresse
-  let address = document.getElementById('address');
-  let badAddress = document.getElementById('addressErrorMsg');
-  let regexAdrs = /^[a-zA-Z0-9\s,'-]*$/;
+    descriptionOk.addEventListener('input', (e) => {
+      e.preventDefault();
+      if (!regex.test(descriptionOk)) {
+        descriptionBad.textContent = "ERREUR : Nom ou Prénom ou Ville non renseigné ou invalide";
+      }else{
+        descriptionOk.textContent = 'valide';
 
-  address.addEventListener('input', (e) =>{
-    e.preventDefault();
-    if(!regexAdrs.test(address.value)){
-      badAddress.textContent = "ERREUR : Adresse non rensigne ou adresse invalide";
-    } else {
-      badAddress.textContent = "Adresse valide";
-    }
-  })
-  // Ville
-  let town = document.getElementById('city');
-  let badTown = document.getElementById('cityErrorMsg');
-  //let regexTwn =  /^[a-zA-Z',.\s-]{1,35}$/;
+      }
+    })
+    console.log(descriptionOk);
+    console.log(descriptionBad);
+    // firstName.addEventListener('input', (e) => {
+    //   e.preventDefault();
+    //   if(!regex.test(firstName.value)){
+    //     badFirstName.textContent = "ERREUR : Prénom non renseigné ou prenom invalide";
+    //   } else {
+    //     badFirstName.textContent = 'Prénom valide';
+    //   }
+    // })
+    // Nom
+    // let lastName = document.getElementById('lastName');
+    // let badLastName = document.getElementById('lastNameErrorMsg');
+    // //let regexLstNm = /^(?=.{3,50}$)[a-z]+(?:['_.\s][a-z]+)*$/i;
 
-  town.addEventListener('input', (e) => {
-    if(!regex.test(town.value)){
-      badTown.textContent = "ERREUR : Ville non renseigné ou ville invalide";
-    } else {
-      badTown.textContent = "Ville valide";
-    }
-  })
-  // E-mail
-  let email = document.getElementById('email');
-  let badEmail = document.getElementById('emailErrorMsg');
-  let regexEmail = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+    // lastName.addEventListener('input', (e) => {
+    //   e.preventDefault();
+    //   if(!regex.test(lastName.value)){
+    //     badLastName.textContent= "ERREUR : Nom non renseigné ou nom invalide";
+    //   } else {
+    //     badLastName.textContent= "Nom valide";
+    //   }
+    // })
+    // Adresse
+    let address = document.getElementById('address');
+    let badAddress = document.getElementById('addressErrorMsg');
+    let regexAdrs = /^[a-zA-Z0-9\s,'-]*$/;
 
-  email.addEventListener('input', (e) => {
-    if(!regexEmail.test(email.value)){
-      badEmail.textContent = "ERREUR : Email non renseigné ou email invalid";
-    } else {
-      badEmail.textContent = "Email valide";
-    }
-  })
-  console.log(firstName, lastName, address, town, email);
+    address.addEventListener('input', (e) =>{
+      e.preventDefault();
+      if(!regexAdrs.test(address.value)){
+        badAddress.textContent = "ERREUR : Adresse non rensigne ou adresse invalide";
+      } else {
+        badAddress.textContent = "Adresse valide";
+      }
+    })
+    // Ville
+    // let town = document.getElementById('city');
+    // let badTown = document.getElementById('cityErrorMsg');
+    // //let regexTwn =  /^[a-zA-Z',.\s-]{1,35}$/;
+
+    // town.addEventListener('input', (e) => {
+    //   e.preventDefault();
+    //   if(!regex.test(town.value)){
+    //     badTown.textContent = "ERREUR : Ville non renseigné ou ville invalide";
+    //   } else {
+    //     badTown.textContent = "Ville valide";
+    //   }
+    // })
+    // E-mail
+    let email = document.getElementById('email');
+    let badEmail = document.getElementById('emailErrorMsg');
+    let regexEmail = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{2,})$/i;
+
+    email.addEventListener('input', (e) => {
+      e.preventDefault();
+      if(!regexEmail.test(email.value)){
+        badEmail.textContent = "ERREUR : Email non renseigné ou email invalid";
+      } else {
+        badEmail.textContent = "Email valide";
+      }
+    })
+      throw new error ('Formulaire invalide');
+  } catch (error) {
+    evt.preventDefault
+  }
+  
+  
   formAdd();// <= envoi des infos client au localstorage
 }
 
 // Recuperation et envoi des infos client et panier au click du button Commander
-function formAdd() { 
-  let btn = document.getElementById('order'); // <= recuperation de l'element du DOM
-  btn.addEventListener('click', () => { 
-    // recuperer le form
-    let firstNameInput = document.getElementById('firstName');
-    let lastNameInput = document.getElementById('lastName');
-    let addressInput = document.getElementById('address');
-    let townInput = document.getElementById('city');
-    let emailInput = document.getElementById('email');
+// function formAdd() { 
+  
+//     let client = {};
+//     let prod = [];
+//     // recuperer le form et test avant l'envoi
+//     let firstNameInput = document.getElementById('firstName');
+//     let lastNameInput = document.getElementById('lastName');
+//     let addressInput = document.getElementById('address');
+//     let townInput = document.getElementById('city');
+//     let emailInput = document.getElementById('email');
+
+//     if(!firstNameInput || !lastNameInput || addressInput || !townInput || !emailInput){
+//       alert('Une erreur est survenue dans votre formulaire.');
+      
+//     }
+//     else {
+//       client = {
+//         'firstName': firstNameInput.value,
+//         'lastName': lastNameInput.value,
+//         'address': addressInput.value,
+//         'city': townInput.value,
+//         'email': emailInput
+//       }
+//     }
+//     console.log(client);
+//     // ajouter le panier(localStorage)
+//     let addStorage = JSON.parse(localStorage.getItem('selectionProd'));
     
-    // ajouter le panier(localStorage)
-    // faire l'envoi a page confirmation
-  });
-}
+// }
