@@ -114,8 +114,9 @@ function createBasket(kanap){
 
   //Appel de la fonction formulaire
   let addForm = document.querySelector("form");
-  addForm.addEventListener('submit', function(evt){
-    form(evt);
+  addForm.addEventListener('submit', function(){
+    form();
+    return false;
   });
 }
 // ----- CALCUL DU PANIER ----- //
@@ -184,15 +185,15 @@ function deletedStorage(event){
 
 // ---------- PARTIE FORMULAIRE : INFO CLIENT---------- //
 
-function form(evt) {
+function form() {
   // PRENOM
   let firstName = document.getElementById('firstName');
   let badFirstName = document.getElementById('firstNameErrorMsg');
-  let regexFirstNm = /^(?=.{3,50}$)[a-z]+(?:['_.\s][a-z]+)*$/i;
+  let regexFirstNm = /^(((?=.{3,50}$)[A-Za-zéèàôï]+[,.]?[ ]?|[a-z]+['-]?)+)*$/mg;
   //NOM
   let lastName = document.getElementById('lastName');
   let badLastName = document.getElementById('lastNameErrorMsg');
-  let regexLstNm = /^(?=.{3,50}$)[a-z]+(?:['_.\s][a-z]+)*$/i;
+  let regexLstNm = /^(((?=.{3,50}$)[A-Za-zéèàôï]+[,.]?[ ]?|[a-z]+['-]?)+)*$/mg;
   // ADRESSE
   let address = document.getElementById('address');
   let badAddress = document.getElementById('addressErrorMsg');
@@ -200,73 +201,102 @@ function form(evt) {
   //VILLE
   let town = document.getElementById('city');
   let badTown = document.getElementById('cityErrorMsg');
-  let regexTwn =  /^(?=.{3,50}$)[a-z]+(?:['_.\s][a-z]+)*$/i;
+  let regexTwn =  /^(((?=.{3,50}$)[A-Za-zéèàôï]+[,.]?[ ]?|[a-z]+['-]?)+)*$/mg;
   // E-MAIL
   let email = document.getElementById('email');
   let badEmail = document.getElementById('emailErrorMsg');
-  let regexEmail = /^(([^<>()[\]\.,;:\s@\"]+(\.[^<>()[\]\.,;:\s@\"]+)*)|(\".+\"))@(([^<>()[\]\.,;:\s@\"]+\.)+[^<>()[\]\.,;:\s@\"]{10,})$/i;
-  try {
-    // TEST PRENOM
-    firstName.addEventListener('input', (e) => {
-      e.preventDefault();
-      if(!regexFirstNm.test(firstName.value) || regexFirstNm){
-        badFirstName.textContent = "ERREUR : Prénom non renseigné ou invalide";
-      } else {
-        badFirstName.textContent = 'Prénom valide';
-      }
-    });  
-    //TEST NOM
-    lastName.addEventListener('input', (e) => {
-      e.preventDefault();
-      if(!regexLstNm.test(lastName.value) || regexLstNm == ''){
-        badLastName.textContent= "ERREUR : Nom non renseigné ou nom invalide";
-      } else {
-        badLastName.textContent= "Nom valide";
-      }
-    });   
-    //TEST ADRESSE
-    address.addEventListener('input', (e) =>{
-      e.preventDefault();
-      if(!regexAdrs.test(address.value) || regexAdrs == ''){
-        badAddress.textContent = "ERREUR : Adresse non rensigne ou adresse invalide";
-      } else {
-        badAddress.textContent = "Adresse valide";
-      }
-    });
-    //TEST VILLE
-    town.addEventListener('input', (e) => {
-      e.preventDefault();
-      if(!regexTwn.test(town.value) || regexTwn == ''){
-        badTown.textContent = "ERREUR : Ville non renseigné ou ville invalide";
-      } else {
-        badTown.textContent = "Ville valide";
-      }
-    });
-    // TEST E-MAIL
-    email.addEventListener('input', (e) => {
-      e.preventDefault();
-      if(!regexEmail.test(email.value) || regexEmail == ''){
-        badEmail.textContent = "ERREUR : Email non renseigné ou email invalid";
-      } else {
-        badEmail.textContent = "Email valide";
-      }
-    });
-    
-  } 
-  catch (error) {
-    evt.preventDefault();
-    alert('Err :: invalide');
-    
+  let regexEmail = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9-]{2,}[.][a-zA-Z]{2,3}$/
+  
+  let testValue = true;
+  let contact = {};
+
+  // TEST PRENOM
+  if('' === firstName.value || !regexFirstNm.test(firstName.value)) {
+    badFirstName.textContent = "ERREUR : Prénom non renseigné ou invalide";
+    testValue &= false;
+  } else {
+    badFirstName.textContent = 'Prénom valide';
+    contact.firstname = firstName.value;
+    console.log(firstName.value);
   }
-  console.log(firstName.value, lastName.value, address.value, town.value, email.value);
+    
+  //TEST NOM
+  if('' === lastName.value || !regexLstNm.test(lastName.value)) {
+    badLastName.textContent= "ERREUR : Nom non renseigné ou nom invalide";
+    testValue &= false;
+  } else {
+    badLastName.textContent= "Nom valide";
+    contact.lastName = lastName.value;
+  }
+       
+  //TEST ADRESSE
+  if('' === address.value || !regexAdrs.test(address.value)) {
+    badAddress.textContent = "ERREUR : Adresse non rensigne ou adresse invalide";
+    testValue &= false;
+  } else {
+    badAddress.textContent = "Adresse valide";
+    contact.address = address.value
+  }
+    
+  //TEST VILLE
+  if('' === town.value || !regexTwn.test(town.value)) {
+    badTown.textContent = "ERREUR : Ville non renseigné ou ville invalide";
+    testValue &= false;
+  } else {
+    badTown.textContent = "Ville valide";
+    contact.town = town.value;
+  }
+    
+  // TEST E-MAIL
+  if('' === email.value || !regexEmail.test(email.value)) {
+    badEmail.textContent = "ERREUR : Email non renseigné ou email invalid";
+    testValue &= false;
+  } else {
+    badEmail.textContent = "Email valide";
+    contact.email = email.value;
+  }
+    
+  if(!testValue) {
+    alert('le formulaire n\'as pas étébien rempli');
+    return false;
+  }
+  
+  let products = [];
+      for (i = 0; i < products.length; i++) {
+        products.push(products[i]._id);
+      }
+      const sendForm = {
+        contact,
+        products
+      };
+  if(firstName.value && lastName.value && address.value && town.value && email.value) {
+    localStorage.setItem('contact', JSON.stringify(contact));
+    return fetch("http://localhost:3000/api/products/order", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(sendForm),
+        })
+          .then((response) => response.json())
+          .then((order) => {
+            localStorage.setItem('orderId', order.orderId);
+            window.location.href =
+              'confirmation.html' + '?' + 'name' + '=' + order.orderId;
+            localStorage.clear();
+          })
+          .catch((err) => console.log('Il y a un problème: ', err));
+      } else {
+        alert('vérifier vos données dans le formulaire');
+      }
+     
   //formAdd(e);// <= envoi des infos client au localstorage
 }
-
-
+form()
 // Recuperation et envoi des infos client et panier au click du button Commander
-//  function formAdd(e) { 
+//function formAdd(e) { 
   
-//       let client = {};
+//       let contact = {};
 //       let prod = [];
 //       // recuperer le form et test avant l'envoi
 //       let firstNameInput = document.getElementById('firstName');
@@ -294,5 +324,5 @@ function form(evt) {
 //       }
         
         
-//       }
+//}
       
