@@ -120,12 +120,13 @@ function getCart() {
     alert('ERR :: Un probleme est survenue')
     return resultAdd; // On arrete le processus
   }
+  alert('Votre achat a bien été ajouter au panier.')
   // sinon on retourne le localstorage selectionné
   return JSON.parse(localStorage.getItem("selectionProd"));
 }
 /**
  *  DOMContentLoaded est emis lorsque le document HTML
- *  a été completement chargéet analysé, sans attendre
+ *  a été completement chargé et analysé, sans attendre
  *  que les feuilees de style, images et sous dossiers
  *  aient terminé de charger
  */
