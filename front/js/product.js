@@ -83,12 +83,14 @@ function addToCart(event) {
   // Test du choix de couleur
   if('' === selectedColor){ 
     alert('Err :: Couleur non selectionné');
+    btn.removeAttribute('disabled');
     return false;
   }
 
   // Test de la quantitée choisie
   if(selectedQty <= 0 || selectedQty > 100){
     alert('Err :: le nombre d\'article doit être compris entre 1 et 100');
+    btn.removeAttribute('disabled');
     return false;
   }
   // On test et on calcul si il une modification sur l'element choisit
