@@ -8,7 +8,6 @@ function getId() {
   if(!id){
     alert('ERR : Api non disponible ou non trouvé');
   }
-  console.log(id);
   getProduct(id); // appel de fonction pour json
 }
 // Appel de JSON 
@@ -79,19 +78,24 @@ function addToCart(event) {
     numberProduct : selectedQty
   }
 
-  btn.removeAttribute('disabled');
+  //btn.removeAttribute('disabled');
   // Test du choix de couleur
   if('' === selectedColor){ 
     alert('Err :: Couleur non selectionné');
-    btn.removeAttribute('disabled');
+    
     return false;
+  }else {
+    btn.removeAttribute('disabled');
   }
+
 
   // Test de la quantitée choisie
   if(selectedQty <= 0 || selectedQty > 100){
     alert('Err :: le nombre d\'article doit être compris entre 1 et 100');
     btn.removeAttribute('disabled');
     return false;
+  } else {
+    btn.removeAttribute('disabled');
   }
   // On test et on calcul si il une modification sur l'element choisit
   let cart = getCart();

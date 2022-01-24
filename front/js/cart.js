@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function initCart(){ 
   // envoyer une chaîne de données au serveur en modifiant la propriété search
   const catchUrl = window.location.search; 
-  // constructeur crée et retourne un nouvel URLSearchParamsobjet
+  // constructeur crée et retourne un nouvel URLSearchParams objetc
   const catchOrderId = new URLSearchParams(catchUrl);
   if(catchOrderId.get('name') !== null){
     const idLocation = document.querySelector("#orderId");
@@ -181,6 +181,7 @@ function deletedStorage(event){
   for(let item of delStorage) {
     if(item.idProduct == idDel && item.colorProduct == colorDel) {
       articleDel.remove();
+      alert('Etes-vous certain de vouloir supprimer cet article.');
     }else {
       newPanier.push(item);
     }
@@ -296,7 +297,7 @@ function form() {
       localStorage.clear();
     })
     .catch((err) => console.log('Il y a un problème: ', err));
-    
+
   } else {
         alert('vérifier vos données dans le formulaire');
   }
