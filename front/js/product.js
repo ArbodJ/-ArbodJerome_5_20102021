@@ -90,7 +90,7 @@ function addToCart(event) {
 
 
   // Test de la quantitée choisie
-  if(selectedQty <= 0 || selectedQty > 100){
+  if(selectedQty <= 0 || selectedQty > 100 || !selectedQty){
     alert('Err :: le nombre d\'article doit être compris entre 1 et 100');
     btn.removeAttribute('disabled');
     return false;
@@ -121,7 +121,7 @@ function getCart() {
   let resultAdd = [];
   // si different du localstorage selectionné
   if(!localStorage.getItem("selectionProd")){
-    alert('ERR :: Un probleme est survenue')
+    //alert('ERR :: Un probleme est survenue')
     return resultAdd; // On arrete le processus
   }
   alert('Votre achat a bien été ajouter au panier.')

@@ -23,7 +23,7 @@ function initCart(){
 }
 // ----- Fonction qui test le panier reçu
 function displayProd(){
-  let panier = JSON.parse(localStorage.getItem("selectionProd"));
+  let panier = getLS();//JSON.parse(localStorage.getItem("selectionProd"));
   if(panier === null || !panier.length){
     alert('Le panier est vide');
     return false;
@@ -154,14 +154,20 @@ function calculTtl(){
 
 // ----- MODIFIER LA VALEUR (+ / -) DU/DES PRODUIT(S) DU PANIER ----- //
 function updateQty(event){
+  
   // on recupere le localstorage
-  let recupStorage = JSON.parse(localStorage.getItem('selectionProd'));
+  let recupStorage = getLS();//JSON.parse(localStorage.getItem('selectionProd'));
   // on recuperer les attribut a calculer
   recupStorage.forEach(item => {
     if(item.idProduct == event.target.idProduct && item.colorProduct == event.target.colorProduct){
-      item.numberProduct = parseInt(event.target.value);
+      let qty = event.target.value;
+      if(qty <= 0 || qty > 100 || !qty){
+        event.target.value = item.numberProduct;
+      } else {
+        item.numberProduct = parseInt(event.target.value);
+      }
     }
-  })
+  });
   // on remet a jour le localstorage
   localStorage.setItem('selectionProd', JSON.stringify(recupStorage));  
   console.log(event.target.value);
@@ -175,13 +181,16 @@ function deletedStorage(event){
   let idDel = articleDel.getAttribute('data-id');
   let colorDel = articleDel.getAttribute('data-color');
   
-  let delStorage = JSON.parse(localStorage.getItem('selectionProd'));
+  let delStorage = getLS();//JSON.parse(localStorage.getItem('selectionProd'));
   let newPanier = [];
   
   for(let item of delStorage) {
-    if(item.idProduct == idDel && item.colorProduct == colorDel) {
+    if(item.idProduct == idDel 
+      && item.colorProduct == colorDel
+      && confirm('Etes-vous certain de vouloir supprimer cet article ?')
+      ) {
       articleDel.remove();
-      alert('Etes-vous certain de vouloir supprimer cet article.');
+      
     }else {
       newPanier.push(item);
     }
@@ -193,15 +202,21 @@ function deletedStorage(event){
 }
 
 // ---------- PARTIE FORMULAIRE : INFO CLIENT---------- //
+// Regex
+function testRgx(name) {
+  let regexTest = /^(((?=.{3,50}$)[A-Za-zéèàôï]+[,.]?[ ]?|[a-z]+['-]?)+)*$/mg;
+
+  return regexTest.test(name);
+}
 function form() {
   // PRENOM
   let firstName = document.getElementById('firstName');
   let badFirstName = document.getElementById('firstNameErrorMsg');
-  let regexFirstNm = /^(((?=.{3,50}$)[A-Za-zéèàôï]+[,.]?[ ]?|[a-z]+['-]?)+)*$/mg;
+  //let regexFirstNm = /^(((?=.{3,50}$)[A-Za-zéèàôï]+[,.]?[ ]?|[a-z]+['-]?)+)*$/mg;
   // NOM
   let lastName = document.getElementById('lastName');
   let badLastName = document.getElementById('lastNameErrorMsg');
-  let regexLstNm = /^(((?=.{3,50}$)[A-Za-zéèàôï]+[,.]?[ ]?|[a-z]+['-]?)+)*$/mg;
+  //let regexLstNm = /^(((?=.{3,50}$)[A-Za-zéèàôï]+[,.]?[ ]?|[a-z]+['-]?)+)*$/mg;
   // ADRESSE
   let address = document.getElementById('address');
   let badAddress = document.getElementById('addressErrorMsg');
@@ -209,7 +224,7 @@ function form() {
   //VILLE
   let town = document.getElementById('city');
   let badTown = document.getElementById('cityErrorMsg');
-  let regexTwn =  /^(((?=.{3,50}$)[A-Za-zéèàôï]+[,.]?[ ]?|[a-z]+['-]?)+)*$/mg;
+  //let regexTwn =  /^(((?=.{3,50}$)[A-Za-zéèàôï]+[,.]?[ ]?|[a-z]+['-]?)+)*$/mg;
   // E-MAIL
   let email = document.getElementById('email');
   let badEmail = document.getElementById('emailErrorMsg');
@@ -219,7 +234,7 @@ function form() {
   let contact = {};
 
   // TEST PRENOM
-  if('' === firstName.value || !regexFirstNm.test(firstName.value)) {
+  if('' === firstName.value || !testRgx(firstName.value)) {
     badFirstName.textContent = "ERREUR : Prénom non renseigné ou invalide";
     testValue &= false;
   } else {
@@ -229,7 +244,7 @@ function form() {
   }
     
   //TEST NOM
-  if('' === lastName.value || !regexLstNm.test(lastName.value)) {
+  if('' === lastName.value || !testRgx(lastName.value)) {
     badLastName.textContent= "ERREUR : Nom non renseigné ou nom invalide";
     testValue &= false;
   } else {
@@ -247,7 +262,7 @@ function form() {
   }
     
   //TEST VILLE
-  if('' === town.value || !regexTwn.test(town.value)) {
+  if('' === town.value || !testRgx(town.value)) {
     badTown.textContent = "ERREUR : Ville non renseigné ou ville invalide";
     testValue &= false;
   } else {
@@ -265,24 +280,30 @@ function form() {
   }
   // TEST du formulaire rempli
   if(!testValue) {
-    alert('le formulaire n\'as pas étébien rempli');
+    alert('le formulaire n\'as pas été bien rempli');
     return false;
   }
+
   // ----- Partie de l'envoi du formulaire ----- //
-  let panier = JSON.parse(localStorage.getItem("selectionProd"));
-  let products = [];
-  for (i = 0; i < panier.length; i++) { 
-    products.push(panier[i].idProduct);
-  }
+  let products = getProducts();
+  //let panier = JSON.parse(localStorage.getItem("selectionProd"));
+  //let products = [];
+  // for (i = 0; i < panier.length; i++) { 
+  //   products.push(panier[i].idProduct);
+  // }
   const sendForm = {
     contact,
     products
   };
-  // TEST des informations envoyer
-  if(firstName.value && lastName.value && address.value && town.value && email.value) {
-    localStorage.setItem('contact', JSON.stringify(contact));
+  sendToApi(sendForm);
+}
 
-    return fetch("http://localhost:3000/api/products/order", {
+function sendToApi(sendForm) {
+  // TEST des informations envoyer
+  // if(firstName.value && lastName.value && address.value && town.value && email.value) {
+  //   localStorage.setItem('contact', JSON.stringify(contact));
+
+    fetch("http://localhost:3000/api/products/order", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -298,7 +319,22 @@ function form() {
     })
     .catch((err) => console.log('Il y a un problème: ', err));
 
-  } else {
-        alert('vérifier vos données dans le formulaire');
+  // } else {
+  //       alert('vérifier vos données dans le formulaire');
+  // }
+}
+function getProducts(){
+
+  let products = [];
+
+  let panier = getLS();
+  for (i = 0; i < panier.length; i++) { 
+    products.push(panier[i].idProduct);
   }
+
+  return products;
+}
+
+function getLS() {
+  return JSON.parse(localStorage.getItem("selectionProd"));
 }
