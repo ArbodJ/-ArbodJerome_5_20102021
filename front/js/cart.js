@@ -30,6 +30,12 @@ function displayProd(){
   } else {
     complementProd(panier);
   }
+  let addForm = document.querySelector("form");
+  addForm.addEventListener('submit', function(e){
+    e.preventDefault();
+    form();
+    return false;
+  });
 }
 // ----- Fonction pour recupere API ----- //
 function complementProd(panier){
@@ -128,13 +134,6 @@ function createBasket(kanap){
   // Appel de la fonction calcul
   calculTtl();
 
-  //Appel de la fonction formulaire
-  let addForm = document.querySelector("form");
-  addForm.addEventListener('submit', function(e){
-    e.preventDefault();
-    form();
-    return false;
-  });
 }
 
 // ----- CALCUL DU PANIER ----- //
@@ -156,7 +155,7 @@ function calculTtl(){
 function updateQty(event){
   
   // on recupere le localstorage
-  let recupStorage = getLS();//JSON.parse(localStorage.getItem('selectionProd'));
+  let recupStorage = getLS();// => JSON.parse(localStorage.getItem('selectionProd'));
   // on recuperer les attribut a calculer
   recupStorage.forEach(item => {
     if(item.idProduct == event.target.idProduct && item.colorProduct == event.target.colorProduct){
@@ -286,11 +285,7 @@ function form() {
 
   // ----- Partie de l'envoi du formulaire ----- //
   let products = getProducts();
-  //let panier = JSON.parse(localStorage.getItem("selectionProd"));
-  //let products = [];
-  // for (i = 0; i < panier.length; i++) { 
-  //   products.push(panier[i].idProduct);
-  // }
+  
   const sendForm = {
     contact,
     products
@@ -300,31 +295,24 @@ function form() {
 
 function sendToApi(sendForm) {
   // TEST des informations envoyer
-  // if(firstName.value && lastName.value && address.value && town.value && email.value) {
-  //   localStorage.setItem('contact', JSON.stringify(contact));
-
-    fetch("http://localhost:3000/api/products/order", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(sendForm),
-    })
-    .then((response) => response.json())
-    .then((order) => {
-      localStorage.setItem('orderId', order.orderId);
-      window.location.href =
-        'confirmation.html' + '?' + 'name' + '=' + order.orderId;
-      localStorage.clear();
-    })
-    .catch((err) => console.log('Il y a un problème: ', err));
-
-  // } else {
-  //       alert('vérifier vos données dans le formulaire');
-  // }
+  fetch("http://localhost:3000/api/products/order", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(sendForm),
+  })
+  .then((response) => response.json())
+  .then((order) => {
+    localStorage.setItem('orderId', order.orderId);
+    window.location.href =
+      'confirmation.html' + '?' + 'name' + '=' + order.orderId;
+    localStorage.clear();
+  })
+  .catch((err) => console.log('Il y a eu un problème: ', err));
 }
-function getProducts(){
 
+function getProducts(){
   let products = [];
 
   let panier = getLS();

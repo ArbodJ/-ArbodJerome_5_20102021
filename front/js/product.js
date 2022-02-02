@@ -92,7 +92,7 @@ function addToCart(event) {
   // Test de la quantitée choisie
   if(selectedQty <= 0 || selectedQty > 100 || !selectedQty){
     alert('Err :: le nombre d\'article doit être compris entre 1 et 100');
-    btn.removeAttribute('disabled');
+    //btn.removeAttribute('disabled');
     return false;
   } else {
     btn.removeAttribute('disabled');
@@ -113,6 +113,7 @@ function addToCart(event) {
   } else {
     cart.push(selection);
   }
+  alert('Votre achat a bien été ajouter au panier.')
   // on creer le nouveau localstorage
   localStorage.setItem("selectionProd", JSON.stringify(cart)); 
 }
@@ -124,7 +125,7 @@ function getCart() {
     //alert('ERR :: Un probleme est survenue')
     return resultAdd; // On arrete le processus
   }
-  alert('Votre achat a bien été ajouter au panier.')
+  
   // sinon on retourne le localstorage selectionné
   return JSON.parse(localStorage.getItem("selectionProd"));
 }

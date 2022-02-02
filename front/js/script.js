@@ -47,7 +47,7 @@ function create(product) {
   let p = document.createElement('p');
   p.setAttribute('class', 'productDescription');
   p.textContent = product.description;
-  // positionnement des elements  
+  // positionnement des elements 
   article.append(img, h3, p);
   link.append(article);
 
