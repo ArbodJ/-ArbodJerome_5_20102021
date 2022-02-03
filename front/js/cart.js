@@ -152,7 +152,7 @@ function calculTtl(){
 }
 
 // ----- MODIFIER LA VALEUR (+ / -) DU/DES PRODUIT(S) DU PANIER ----- //
-function updateQty(event){
+function updateQty(event){1
   
   // on recupere le localstorage
   let recupStorage = getLS();// => JSON.parse(localStorage.getItem('selectionProd'));
@@ -207,6 +207,7 @@ function testRgx(name) {
 
   return regexTest.test(name);
 }
+
 function form() {
   // PRENOM
   let firstName = document.getElementById('firstName');
